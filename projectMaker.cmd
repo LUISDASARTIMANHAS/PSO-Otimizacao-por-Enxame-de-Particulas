@@ -15,6 +15,10 @@ if not exist "zip" (
     mkdir "zip"
     "inicialization" >> zip/zip.config
 )
+if not exist "libs" (
+    mkdir "libs"
+    "inicialization" >> libs/libs.config
+)
 
 :: Criação do arquivo .gitignore com o conteúdo desejado, caso não exista
 if not exist ".gitignore" (

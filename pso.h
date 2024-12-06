@@ -3,6 +3,7 @@
 #include <time.h>
 #include <math.h>
 #include <float.h>
+#include "data/libs/fileSys.cpp"
 
 // Estrutura para representar uma partícula
 typedef struct {
