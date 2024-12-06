@@ -1,9 +1,0 @@
-Populacao: 50, Iteracoes: 20, Melhor: -891.613212, Media: -845.904788, DesvioPadrao: 101.493304
-Populacao: 50, Iteracoes: 50, Melhor: -894.621066, Media: -777.120673, DesvioPadrao: 80.779574
-Populacao: 50, Iteracoes: 100, Melhor: -935.341322, Media: -829.134678, DesvioPadrao: 112.613402
-Populacao: 100, Iteracoes: 20, Melhor: -718.168234, Media: -797.434358, DesvioPadrao: 108.052753
-Populacao: 100, Iteracoes: 50, Melhor: -956.920236, Media: -927.868586, DesvioPadrao: 36.032590
-Populacao: 100, Iteracoes: 100, Melhor: -894.654963, Media: -931.216760, DesvioPadrao: 30.667900
-Populacao: 20, Iteracoes: 20, Melhor: -894.591946, Media: -820.867979, DesvioPadrao: 100.565801
-Populacao: 20, Iteracoes: 50, Melhor: -959.642627, Media: -877.006559, DesvioPadrao: 124.499218
-Populacao: 20, Iteracoes: 100, Melhor: -956.920311, Media: -899.153894, DesvioPadrao: 67.073809

@@ -18,8 +18,8 @@ insert_final_newline = false
  
 # Ignorar arquivos de saída 
 output/ 
-output/* 
-output 
+output/*
+*output*
  
 # Ignorar arquivos JSON 
 *.json 
