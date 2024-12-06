@@ -165,16 +165,16 @@ int main() {
             fWiriteSTRING(arquivo," População: ");
             fWiriteINT(arquivo,populacoes[rodadasPorPopulacao]);
 
-            fWiriteSTRING(arquivo," Iterações: ");
+            fWiriteSTRING(arquivo,", Iterações: ");
             fWiriteINT(arquivo,iteracoes[iter]);
 
-            fWiriteSTRING(arquivo," Melhor: ");
+            fWiriteSTRING(arquivo,", Melhor: ");
             fWiriteFLOAT(arquivo,resultados[0]);
 
-            fWiriteSTRING(arquivo," Media: ");
+            fWiriteSTRING(arquivo,", Media: ");
             fWiriteFLOAT(arquivo,media);
 
-            fWiriteSTRING(arquivo," DesvioPadrao: ");
+            fWiriteSTRING(arquivo,", DesvioPadrão: ");
             fWiriteFLOAT(arquivo,desvioPadrao);
             fWiriteLN(arquivo);
 
