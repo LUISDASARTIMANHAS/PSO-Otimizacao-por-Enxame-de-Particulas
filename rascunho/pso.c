@@ -143,17 +143,17 @@ int main() {
     srand(time(NULL));
     int iteracoes[] = {20, 50, 100};
     int populacoes[] = {50, 100};
-    FILE *arquivo = fopen("resultados.txt", "w");
+    FILE *arquivo = abrirArquivo("resultados.txt", "w");
 
-    for (int p = 0; p < 3; p++) {
+    for (int rodadasPorPopulacao = 0; rodadasPorPopulacao < 3; rodadasPorPopulacao++) {
         for (int iter = 0; iter < 3; iter++) {
             double resultados[10];
             for (int execucao = 0; execucao < 10; execucao++) {
                 Swarm enxame;
-                inicializarEnxame(&enxame, populacoes[p], 2, -512, 512, 77);
+                inicializarEnxame(&enxame, populacoes[rodadasPorPopulacao], 2, -512, 512, 77);
                 resultados[execucao] = executarPSO(&enxame, iteracoes[iter], 0.5, 1.5, 1.5, -512, 512);
                 free(enxame.globalBestPosition);
-                for (int i = 0; i < populacoes[p]; i++) {
+                for (int i = 0; i < populacoes[rodadasPorPopulacao]; i++) {
                     free(enxame.particles[i].position);
                     free(enxame.particles[i].velocity);
                     free(enxame.particles[i].bestPosition);
@@ -162,8 +162,24 @@ int main() {
             }
             double media = calcularMedia(resultados, 10);
             double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
-            fprintf(arquivo, "Populacao: %d, Iteracoes: %d, Melhor: %.6f, Media: %.6f, DesvioPadrao: %.6f\n",
-                    populacoes[p], iteracoes[iter], resultados[0], media, desvioPadrao);
+            fWiriteSTRING(arquivo," População: ");
+            fWiriteINT(arquivo,populacoes[rodadasPorPopulacao]);
+
+            fWiriteSTRING(arquivo," Iterações: ");
+            fWiriteINT(arquivo,iteracoes[iter]);
+
+            fWiriteSTRING(arquivo," Melhor: ");
+            fWiriteFLOAT(arquivo,resultados[0]);
+
+            fWiriteSTRING(arquivo," Media: ");
+            fWiriteFLOAT(arquivo,media);
+
+            fWiriteSTRING(arquivo," DesvioPadrao: ");
+            fWiriteFLOAT(arquivo,desvioPadrao);
+            fWiriteLN(arquivo);
+
+            // fprintf(arquivo, "Populacao: %d, Iteracoes: %d, Melhor: %.6f, Media: %.6f, DesvioPadrao: %.6f\n",
+            //         populacoes[rodadasPorPopulacao], iteracoes[iter], resultados[0], media, desvioPadrao);
         }
     }
     printf("Fim do Enxame de Particulas");

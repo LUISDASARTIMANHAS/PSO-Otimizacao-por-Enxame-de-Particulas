@@ -56,28 +56,35 @@ void calcularTempo(double ini) {
     // fprintf(arquivo, "\n%3d %-50s %5d %10.2f", cod, nome, qtde, preco  );
 
 /**
+ * @brief // pula linhas no arquivo
+ */
+void fWiriteLN (FILE *arquivo){
+    fprintf(arquivo, "\n");
+}
+
+/**
  * @brief // Escreve valores inteiros no arquivo
  */
 void fWiriteINT (FILE *arquivo, int value){
-    fprintf(arquivo, "%d\n", value);
+    fprintf(arquivo, "%d", value);
 }
 /**
  * @brief // Escreve valores string no arquivo
  */
 void fWiriteSTRING (FILE *arquivo, char value[]){
-    fprintf(arquivo, "%s\n", value);
+    fprintf(arquivo, "%s", value);
 }
 /**
  * @brief // Escreve valores string no arquivo
  */
 void fWiriteFLOAT (FILE *arquivo, float value){
-    fprintf(arquivo, "%f\n", value);
+    fprintf(arquivo, "%0.6f", value);
 }
 /**
  * @brief // Escreve valores string no arquivo
  */
 void fWiriteDOUBLE (FILE *arquivo, double value){
-    fprintf(arquivo, "%lf\n", value);
+    fprintf(arquivo, "%0.6lf", value);
 }
 
 /**
