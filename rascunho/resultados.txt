@@ -1,0 +1,9 @@
+ População: 50 Iterações: 20 Melhor: -715.978577 Media: -872.789490 DesvioPadrao: 92.185432
+ População: 50 Iterações: 50 Melhor: -786.525940 Media: -870.852844 DesvioPadrao: 73.329880
+ População: 50 Iterações: 100 Melhor: -959.643005 Media: -946.642700 DesvioPadrao: 26.001024
+ População: 100 Iterações: 20 Melhor: -959.641846 Media: -887.049622 DesvioPadrao: 110.886543
+ População: 100 Iterações: 50 Melhor: -959.643250 Media: -928.794678 DesvioPadrao: 73.478111
+ População: 100 Iterações: 100 Melhor: -959.643311 Media: -899.021729 DesvioPadrao: 63.314301
+ População: 20 Iterações: 20 Melhor: -821.206848 Media: -862.854553 DesvioPadrao: 111.925491
+ População: 20 Iterações: 50 Melhor: -935.341125 Media: -795.155823 DesvioPadrao: 97.515572
+ População: 20 Iterações: 100 Melhor: -704.806519 Media: -785.556335 DesvioPadrao: 83.751312
