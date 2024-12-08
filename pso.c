@@ -171,7 +171,7 @@ int main() {
     srand(time(NULL));
     int iteracoes[] = {20, 50, 100};
     int populacoes[] = {50, 100};
-    FILE *arquivo = fopen("resultados.txt", "w");
+    FILE *arquivo = escreverArquivo(LOCALFILE);
 
     for (int p = 0; p < 3; p++) {
         executarInteracao(populacoes, p, iteracoes, arquivo);

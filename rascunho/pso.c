@@ -157,7 +157,8 @@ void executarEnxame(int populacoes[2], int rodadasPorPopulacao, double resultado
 // Função principal
 int main() {
     srand(time(NULL));
-    int iteracoes[] = {20, 50, 100}; // numero de rodadas internas
+    // numero de rodadas internas
+    int iteracoes[] = {20, 50, 100}; 
     int populacoes[] = {50, 100};
     int numRodaddas = 10;
     int count = 0;

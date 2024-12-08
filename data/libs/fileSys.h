@@ -16,12 +16,16 @@
 #define YELLOW "\x1b[33m"
 #define RESET "\x1b[0m"
 
+#define DEFAULT_DATABASE "/data/database.txt"
+
 #define SEPARETOR BLUE "\n================================================\n"  RESET
 
 typedef char string[101];
 
 // Funções que serão implementadas no arquivo .c
 FILE *abrirArquivo(char *nomeArq, char *modo);
+FILE *lerArquivo(char *nomeArq);
+FILE *escreverArquivo(char *nomeArq);
 int freadINT (FILE *arquivo);
 void freadSTRING (FILE *arquivo, char valdestino[]);
 float freadFloat (FILE *arquivo);

@@ -5,6 +5,8 @@
 #include <float.h>
 #include "data/libs/fileSys.cpp"
 
+#define LOCALFILE "../data/resultados.txt"
+
 // Estrutura para representar uma partícula
 typedef struct {
    double *position;    // Posição da partícula (vetor bidimensional)
