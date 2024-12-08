@@ -142,11 +142,11 @@ double calcularDesvioPadrao(double *resultados, int tamanho, double media) {
     return raizQuadradaPersonalizada(soma / tamanho);
 }
 
-void executarEnxame(int populacoes[2], int rodadasPorPopulacao, double resultados[10], int iteracoes[3], int iter){
+void executarEnxame(int populacoes[2], int rodadasPorPopulacao, double resultados[10], int interacao){
     for (int execucao = 0; execucao < 10; execucao++){
         Swarm enxame;
         inicializarEnxame(&enxame, populacoes[rodadasPorPopulacao], 2, -512, 512, 77);
-        resultados[execucao] = executarPSO(&enxame, iteracoes[iter], 0.5, 1.5, 1.5, -512, 512);
+        resultados[execucao] = executarPSO(&enxame, interacao, 0.5, 1.5, 1.5, -512, 512);
         free(enxame.globalBestPosition);
 
         for (int i = 0; i < populacoes[rodadasPorPopulacao]; i++){
@@ -187,9 +187,8 @@ void executarInteracao(int populacoes[2], int p, int iteracoes[3], FILE *arquivo
 }
 
 
-void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, int iteracoes[3], int iter, double resultados[10], double media, double desvioPadrao){
+void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, int interacao, double resultados[10], double media, double desvioPadrao){
     int populacao = populacoes[rodadasPorPopulacao];
-    int inters = iteracoes[iter];
     double melhor = resultados[0];
 
     fWiriteSTRING(arquivo, "População: ");
@@ -197,8 +196,8 @@ void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, i
     printf("População: %d",populacao);
 
     fWiriteSTRING(arquivo, ", Iterações: ");
-    fWiriteINT(arquivo, inters);
-    printf(", Iterações: %d",inters);
+    fWiriteINT(arquivo, interacao);
+    printf(", Iterações: %d",interacao);
 
     fWiriteSTRING(arquivo, ", Melhor: ");
     fWiriteFLOAT(arquivo, melhor);
@@ -214,28 +213,34 @@ void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, i
     fWiriteLN(arquivo);
 }
 
-void inicializar(int populacoes[2], int iteracoes[3], FILE *arquivo){
-    for (int rodadasPorPopulacao = 0; rodadasPorPopulacao < 3; rodadasPorPopulacao++)
-    {
-        for (int iter = 0; iter < 3; iter++)
-        {
-            double resultados[10];
-            double media;
+void inicializar(int populacoes[2], int iteracoes[], FILE *arquivo){
+    int tamInteracoes = arrayLength(iteracoes);
 
-                executarEnxame(populacoes, rodadasPorPopulacao, resultados, iteracoes, iter);
-                media = calcularDesvioPadrao(resultados, 10, media);
-                printf("Melhor: %0.6f\n", resultados[0]);
+    // percorre as rodadas internas / interações
+    for (int i = 0; i < tamInteracoes; i++){
+        int interacao = iteracoes[i];
 
-            printf("\n\n\t MELHOR MINIMO ENCONTRADO: %0.6f\n\n", resultados[0]);
-            media = calcularMedia(resultados, 10);
-            double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
-            gerarRelatorio(arquivo, populacoes, rodadasPorPopulacao, iteracoes, iter, resultados, media, desvioPadrao);
+            printf("interação: %d, V: %d, tam: %d\n",i,interacao,tamInteracoes);
+        // executa as rodadas internas / interações
+        // for (int populacoesExec = 0; populacoesExec < interacao; iter++){
+        //     double resultados[10];
+        //     double media;
 
-            // fprintf(arquivo, "Populacao: %d, Iteracoes: %d, Melhor: %.6f, Media: %.6f, DesvioPadrao: %.6f\n",
-            //         populacoes[rodadasPorPopulacao], iteracoes[iter], resultados[0], media, desvioPadrao);
-        }
+        //         executarEnxame(populacoes, rodadasPorPopulacao, resultados, interacao);
+        //         media = calcularDesvioPadrao(resultados, 10, media);
+        //         printf("Melhor: %0.6f\n", resultados[0]);
+
+        //     printf("\n\n\t MELHOR MINIMO ENCONTRADO: %0.6f\n\n", resultados[0]);
+        //     media = calcularMedia(resultados, 10);
+        //     double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
+        //     gerarRelatorio(arquivo, populacoes, rodadasPorPopulacao, interacao, resultados, media, desvioPadrao);
+
+        //     // fprintf(arquivo, "Populacao: %d, Iteracoes: %d, Melhor: %.6f, Media: %.6f, DesvioPadrao: %.6f\n",
+        //     //         populacoes[rodadasPorPopulacao], iteracoes[iter], resultados[0], media, desvioPadrao);
+        // }
     }
 }
+
 
 // Função principal
 int main() {
@@ -243,11 +248,14 @@ int main() {
     // numero de rodadas internas
     int iteracoes[] = {20, 50, 100}; 
     int populacoes[] = {50, 100};
+    int array[] = { 0, 1, 2, 3, 4, 5, 6 };
     int numRodaddas = 10;
     int count = 0;
     FILE *arquivo = escreverArquivo("resultados.txt");
 
+    printf("%d",arrayLength(array));
     while (numRodaddas >= count){
+        printf("\n\t\t =====| EXECUTANDO RODADA %d |=====\n\n",count);
         inicializar(populacoes, iteracoes, arquivo);
         count++;
     }
