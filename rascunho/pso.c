@@ -154,6 +154,56 @@ void executarEnxame(int populacoes[2], int rodadasPorPopulacao, double resultado
     }
 }
 
+void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, int iteracoes[3], int iter, double resultados[10], double media, double desvioPadrao){
+    int populacao = populacoes[rodadasPorPopulacao];
+    int inters = iteracoes[iter];
+    double melhor = resultados[0];
+
+    fWiriteSTRING(arquivo, "População: ");
+    fWiriteINT(arquivo, populacao);
+    printf("População: %d",populacao);
+
+    fWiriteSTRING(arquivo, ", Iterações: ");
+    fWiriteINT(arquivo, inters);
+    printf(", Iterações: %d",inters);
+
+    fWiriteSTRING(arquivo, ", Melhor: ");
+    fWiriteFLOAT(arquivo, melhor);
+    printf(", Melhor: %0.6f",melhor);
+
+    fWiriteSTRING(arquivo, ", Media: ");
+    fWiriteFLOAT(arquivo, media);
+    printf(", Media: %0.6f",media);
+
+    fWiriteSTRING(arquivo, ", DesvioPadrão: ");
+    fWiriteFLOAT(arquivo, desvioPadrao);
+    printf(", DesvioPadrão: %0.6f",desvioPadrao);
+    fWiriteLN(arquivo);
+}
+
+void inicializar(int populacoes[2], int iteracoes[3], FILE *arquivo){
+    for (int rodadasPorPopulacao = 0; rodadasPorPopulacao < 3; rodadasPorPopulacao++)
+    {
+        for (int iter = 0; iter < 3; iter++)
+        {
+            double resultados[10];
+            double media;
+
+                executarEnxame(populacoes, rodadasPorPopulacao, resultados, iteracoes, iter);
+                media = calcularDesvioPadrao(resultados, 10, media);
+                printf("Melhor: %0.6f\n", resultados[0]);
+
+            printf("\n\n\t MELHOR MINIMO ENCONTRADO: %0.6f\n\n", resultados[0]);
+            media = calcularMedia(resultados, 10);
+            double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
+            gerarRelatorio(arquivo, populacoes, rodadasPorPopulacao, iteracoes, iter, resultados, media, desvioPadrao);
+
+            // fprintf(arquivo, "Populacao: %d, Iteracoes: %d, Melhor: %.6f, Media: %.6f, DesvioPadrao: %.6f\n",
+            //         populacoes[rodadasPorPopulacao], iteracoes[iter], resultados[0], media, desvioPadrao);
+        }
+    }
+}
+
 // Função principal
 int main() {
     srand(time(NULL));
@@ -162,48 +212,13 @@ int main() {
     int populacoes[] = {50, 100};
     int numRodaddas = 10;
     int count = 0;
-    FILE *arquivo = abrirArquivo("resultados.txt", "w");
+    FILE *arquivo = escreverArquivo("resultados.txt");
 
-    while (numRodaddas < count){
-        
+    while (numRodaddas >= count){
+        inicializar(populacoes, iteracoes, arquivo);
         count++;
     }
-    
 
-    for (int rodadasPorPopulacao = 0; rodadasPorPopulacao < 3; rodadasPorPopulacao++) {
-        for (int iter = 0; iter < 3; iter++) {
-            double resultados[10];
-            double media;
-
-            while(-959.5407 <= media){
-                executarEnxame(populacoes, rodadasPorPopulacao, resultados, iteracoes, iter);
-                media = calcularDesvioPadrao(resultados, 10, media);
-                printf("Melhor: %0.6f\n", resultados[0]);
-            }
-
-                printf("\n\n\t MELHOR MINIMO ENCONTRADO: %0.6f\n\n", resultados[0]);
-            media = calcularMedia(resultados, 10);
-            double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
-            fWiriteSTRING(arquivo," População: ");
-            fWiriteINT(arquivo,populacoes[rodadasPorPopulacao]);
-
-            fWiriteSTRING(arquivo,", Iterações: ");
-            fWiriteINT(arquivo,iteracoes[iter]);
-
-            fWiriteSTRING(arquivo,", Melhor: ");
-            fWiriteFLOAT(arquivo,resultados[0]);
-
-            fWiriteSTRING(arquivo,", Media: ");
-            fWiriteFLOAT(arquivo,media);
-
-            fWiriteSTRING(arquivo,", DesvioPadrão: ");
-            fWiriteFLOAT(arquivo,desvioPadrao);
-            fWiriteLN(arquivo);
-
-            // fprintf(arquivo, "Populacao: %d, Iteracoes: %d, Melhor: %.6f, Media: %.6f, DesvioPadrao: %.6f\n",
-            //         populacoes[rodadasPorPopulacao], iteracoes[iter], resultados[0], media, desvioPadrao);
-        }
-    }
     printf("Fim do Enxame de Particulas");
     fclose(arquivo);
     return 0;

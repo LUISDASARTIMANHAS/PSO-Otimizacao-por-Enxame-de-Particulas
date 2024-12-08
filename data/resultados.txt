@@ -1,3 +1,0 @@
-Populacao: 50, Iteracoes: 20, Melhor: -959.641058, Media: -808.933078, DesvioPadrao: 61.245881
-Populacao: 50, Iteracoes: 50, Melhor: -786.525951, Media: -929.322644, DesvioPadrao: 54.071690
-Populacao: 50, Iteracoes: 100, Melhor: -959.643025, Media: -914.145248, DesvioPadrao: 29.785368

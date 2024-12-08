@@ -64,6 +64,8 @@ double avaliarAptidao(double *posicao) {
 
 // Atualiza velocidade
 void atualizarVelocidade(Particle *particula, double *globalBestPosition, int dimensoes, double w, double c1, double c2) {
+    // a) Atualize a velocidade da partícula pela fórmula:
+    
     for (int d = 0; d < dimensoes; d++) {
         double r1 = (double)rand() / RAND_MAX;
         double r2 = (double)rand() / RAND_MAX;
@@ -75,6 +77,8 @@ void atualizarVelocidade(Particle *particula, double *globalBestPosition, int di
 
 // Atualiza posição
 void atualizarPosicao(Particle *particula, double posMin, double posMax, int dimensoes) {
+//     (b) Atualize a posição da particular pela fórmula:
+    //  x (t +1)  x (t)+ v (t +1)
     for (int d = 0; d < dimensoes; d++) {
         particula->position[d] += particula->velocity[d];
         if (particula->position[d] < posMin) {
@@ -138,6 +142,22 @@ double calcularDesvioPadrao(double *resultados, int tamanho, double media) {
     return raizQuadradaPersonalizada(soma / tamanho);
 }
 
+void executarEnxame(int populacoes[2], int rodadasPorPopulacao, double resultados[10], int iteracoes[3], int iter){
+    for (int execucao = 0; execucao < 10; execucao++){
+        Swarm enxame;
+        inicializarEnxame(&enxame, populacoes[rodadasPorPopulacao], 2, -512, 512, 77);
+        resultados[execucao] = executarPSO(&enxame, iteracoes[iter], 0.5, 1.5, 1.5, -512, 512);
+        free(enxame.globalBestPosition);
+
+        for (int i = 0; i < populacoes[rodadasPorPopulacao]; i++){
+            free(enxame.particles[i].position);
+            free(enxame.particles[i].velocity);
+            free(enxame.particles[i].bestPosition);
+        }
+        free(enxame.particles);
+    }
+}
+
 void execucoes(int populacoes[2], int p, double resultados[10], int iteracoes[3], int iter, FILE *arquivo){
         for (int execucao = 0; execucao < 10; execucao++)
         {
@@ -166,17 +186,73 @@ void executarInteracao(int populacoes[2], int p, int iteracoes[3], FILE *arquivo
     }
 }
 
+
+void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, int iteracoes[3], int iter, double resultados[10], double media, double desvioPadrao){
+    int populacao = populacoes[rodadasPorPopulacao];
+    int inters = iteracoes[iter];
+    double melhor = resultados[0];
+
+    fWiriteSTRING(arquivo, "População: ");
+    fWiriteINT(arquivo, populacao);
+    printf("População: %d",populacao);
+
+    fWiriteSTRING(arquivo, ", Iterações: ");
+    fWiriteINT(arquivo, inters);
+    printf(", Iterações: %d",inters);
+
+    fWiriteSTRING(arquivo, ", Melhor: ");
+    fWiriteFLOAT(arquivo, melhor);
+    printf(", Melhor: %0.6f",melhor);
+
+    fWiriteSTRING(arquivo, ", Media: ");
+    fWiriteFLOAT(arquivo, media);
+    printf(", Media: %0.6f",media);
+
+    fWiriteSTRING(arquivo, ", DesvioPadrão: ");
+    fWiriteFLOAT(arquivo, desvioPadrao);
+    printf(", DesvioPadrão: %0.6f",desvioPadrao);
+    fWiriteLN(arquivo);
+}
+
+void inicializar(int populacoes[2], int iteracoes[3], FILE *arquivo){
+    for (int rodadasPorPopulacao = 0; rodadasPorPopulacao < 3; rodadasPorPopulacao++)
+    {
+        for (int iter = 0; iter < 3; iter++)
+        {
+            double resultados[10];
+            double media;
+
+                executarEnxame(populacoes, rodadasPorPopulacao, resultados, iteracoes, iter);
+                media = calcularDesvioPadrao(resultados, 10, media);
+                printf("Melhor: %0.6f\n", resultados[0]);
+
+            printf("\n\n\t MELHOR MINIMO ENCONTRADO: %0.6f\n\n", resultados[0]);
+            media = calcularMedia(resultados, 10);
+            double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
+            gerarRelatorio(arquivo, populacoes, rodadasPorPopulacao, iteracoes, iter, resultados, media, desvioPadrao);
+
+            // fprintf(arquivo, "Populacao: %d, Iteracoes: %d, Melhor: %.6f, Media: %.6f, DesvioPadrao: %.6f\n",
+            //         populacoes[rodadasPorPopulacao], iteracoes[iter], resultados[0], media, desvioPadrao);
+        }
+    }
+}
+
 // Função principal
 int main() {
     srand(time(NULL));
-    int iteracoes[] = {20, 50, 100};
+    // numero de rodadas internas
+    int iteracoes[] = {20, 50, 100}; 
     int populacoes[] = {50, 100};
-    FILE *arquivo = escreverArquivo(LOCALFILE);
+    int numRodaddas = 10;
+    int count = 0;
+    FILE *arquivo = escreverArquivo("resultados.txt");
 
-    for (int p = 0; p < 3; p++) {
-        executarInteracao(populacoes, p, iteracoes, arquivo);
-        printf("Fim do Enxame de Particulas");
-        fclose(arquivo);
-        return 0;
+    while (numRodaddas >= count){
+        inicializar(populacoes, iteracoes, arquivo);
+        count++;
     }
+
+    printf("Fim do Enxame de Particulas");
+    fclose(arquivo);
+    return 0;
 }
