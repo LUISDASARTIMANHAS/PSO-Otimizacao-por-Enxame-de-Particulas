@@ -143,7 +143,7 @@ int main() {
     srand(time(NULL));
     int iteracoes[] = {20, 50, 100};
     int populacoes[] = {50, 100};
-    FILE *arquivo = fopen("resultados.txt", "w");
+    FILE *arquivo = fopen("resultados.csv", "w");
 
     for (int p = 0; p < 2; p++) {
         for (int iter = 0; iter < 3; iter++) {

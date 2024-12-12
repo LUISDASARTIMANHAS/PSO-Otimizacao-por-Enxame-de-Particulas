@@ -213,29 +213,14 @@ void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, i
     fWiriteLN(arquivo);
 }
 
-void inicializar(int populacoes[2], int iteracoes[], FILE *arquivo){
-    int tamInteracoes = arrayLength(iteracoes);
-
-    // percorre as rodadas internas / interações
-    for (int i = 0; i < tamInteracoes; i++){
-        int interacao = iteracoes[i];
-
-            printf("interação: %d, V: %d, tam: %d\n",i,interacao,tamInteracoes);
-        // executa as rodadas internas / interações
-        for (int populacoesExec = 0; populacoesExec < interacao; iter++){
-            double resultados[10];
-            double media;
-
-                executarEnxame(populacoes, rodadasPorPopulacao, resultados, interacao);
-                media = calcularDesvioPadrao(resultados, 10, media);
-                printf("Melhor: %0.6f\n", resultados[0]);
-
-            printf("\n\n\t MELHOR MINIMO ENCONTRADO: %0.6f\n\n", resultados[0]);
-            media = calcularMedia(resultados, 10);
-            double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
-            gerarRelatorio(arquivo, populacoes, rodadasPorPopulacao, interacao, resultados, media, desvioPadrao);
-        }
+void inicializar(int numRodadas, int iteracoes[], FILE *arquivo){
+    int count = 0;
+    while (numRodaddas >= count){
+        printf("\n\t\t =====| EXECUTANDO RODADA %d |=====\n\n",count);
+        inicializar(populacoes, iteracoes, arquivo);
+        count++;
     }
+
 }
 
 
@@ -247,15 +232,10 @@ int main() {
     int populacoes[] = {50, 100};
     int array[] = { 0, 1, 2, 3, 4, 5, 6 };
     int numRodaddas = 10;
-    int count = 0;
-    FILE *arquivo = escreverArquivo("resultados.txt");
+    FILE *arquivo = escreverArquivo(LOCALFILE);
 
-    printf("%d",arrayLength(array));
-    while (numRodaddas >= count){
-        printf("\n\t\t =====| EXECUTANDO RODADA %d |=====\n\n",count);
-        inicializar(populacoes, iteracoes, arquivo);
-        count++;
-    }
+    inicializar(numRodaddas);
+    
 
     printf("Fim do Enxame de Particulas");
     fclose(arquivo);

@@ -5,7 +5,7 @@
 #include <float.h>
 #include "data/libs/fileSys.cpp"
 
-#define LOCALFILE "../data/resultados.txt"
+#define LOCALFILE "./resultados.csv"
 
 // Estrutura para representar uma partícula
 typedef struct {
