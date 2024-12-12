@@ -26,3 +26,5 @@ output/*
  
 # Ignorar arquivos BIN 
 *.bin 
+# Ignorar arquivos EXE 
+*.exe

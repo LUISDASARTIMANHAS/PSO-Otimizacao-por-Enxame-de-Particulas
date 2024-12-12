@@ -222,22 +222,19 @@ void inicializar(int populacoes[2], int iteracoes[], FILE *arquivo){
 
             printf("interação: %d, V: %d, tam: %d\n",i,interacao,tamInteracoes);
         // executa as rodadas internas / interações
-        // for (int populacoesExec = 0; populacoesExec < interacao; iter++){
-        //     double resultados[10];
-        //     double media;
+        for (int populacoesExec = 0; populacoesExec < interacao; iter++){
+            double resultados[10];
+            double media;
 
-        //         executarEnxame(populacoes, rodadasPorPopulacao, resultados, interacao);
-        //         media = calcularDesvioPadrao(resultados, 10, media);
-        //         printf("Melhor: %0.6f\n", resultados[0]);
+                executarEnxame(populacoes, rodadasPorPopulacao, resultados, interacao);
+                media = calcularDesvioPadrao(resultados, 10, media);
+                printf("Melhor: %0.6f\n", resultados[0]);
 
-        //     printf("\n\n\t MELHOR MINIMO ENCONTRADO: %0.6f\n\n", resultados[0]);
-        //     media = calcularMedia(resultados, 10);
-        //     double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
-        //     gerarRelatorio(arquivo, populacoes, rodadasPorPopulacao, interacao, resultados, media, desvioPadrao);
-
-        //     // fprintf(arquivo, "Populacao: %d, Iteracoes: %d, Melhor: %.6f, Media: %.6f, DesvioPadrao: %.6f\n",
-        //     //         populacoes[rodadasPorPopulacao], iteracoes[iter], resultados[0], media, desvioPadrao);
-        // }
+            printf("\n\n\t MELHOR MINIMO ENCONTRADO: %0.6f\n\n", resultados[0]);
+            media = calcularMedia(resultados, 10);
+            double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
+            gerarRelatorio(arquivo, populacoes, rodadasPorPopulacao, interacao, resultados, media, desvioPadrao);
+        }
     }
 }
 

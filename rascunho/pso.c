@@ -138,88 +138,34 @@ double calcularDesvioPadrao(double *resultados, int tamanho, double media) {
     return raizQuadradaPersonalizada(soma / tamanho);
 }
 
-void executarEnxame(int populacoes[2], int rodadasPorPopulacao, double resultados[10], int iteracoes[3], int iter){
-    for (int execucao = 0; execucao < 10; execucao++){
-        Swarm enxame;
-        inicializarEnxame(&enxame, populacoes[rodadasPorPopulacao], 2, -512, 512, 77);
-        resultados[execucao] = executarPSO(&enxame, iteracoes[iter], 0.5, 1.5, 1.5, -512, 512);
-        free(enxame.globalBestPosition);
-
-        for (int i = 0; i < populacoes[rodadasPorPopulacao]; i++){
-            free(enxame.particles[i].position);
-            free(enxame.particles[i].velocity);
-            free(enxame.particles[i].bestPosition);
-        }
-        free(enxame.particles);
-    }
-}
-
-void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, int iteracoes[3], int iter, double resultados[10], double media, double desvioPadrao){
-    int populacao = populacoes[rodadasPorPopulacao];
-    int inters = iteracoes[iter];
-    double melhor = resultados[0];
-
-    fWiriteSTRING(arquivo, "População: ");
-    fWiriteINT(arquivo, populacao);
-    printf("População: %d",populacao);
-
-    fWiriteSTRING(arquivo, ", Iterações: ");
-    fWiriteINT(arquivo, inters);
-    printf(", Iterações: %d",inters);
-
-    fWiriteSTRING(arquivo, ", Melhor: ");
-    fWiriteFLOAT(arquivo, melhor);
-    printf(", Melhor: %0.6f",melhor);
-
-    fWiriteSTRING(arquivo, ", Media: ");
-    fWiriteFLOAT(arquivo, media);
-    printf(", Media: %0.6f",media);
-
-    fWiriteSTRING(arquivo, ", DesvioPadrão: ");
-    fWiriteFLOAT(arquivo, desvioPadrao);
-    printf(", DesvioPadrão: %0.6f",desvioPadrao);
-    fWiriteLN(arquivo);
-}
-
-void inicializar(int populacoes[2], int iteracoes[3], FILE *arquivo){
-    for (int rodadasPorPopulacao = 0; rodadasPorPopulacao < 3; rodadasPorPopulacao++)
-    {
-        for (int iter = 0; iter < 3; iter++)
-        {
-            double resultados[10];
-            double media;
-
-                executarEnxame(populacoes, rodadasPorPopulacao, resultados, iteracoes, iter);
-                media = calcularDesvioPadrao(resultados, 10, media);
-                printf("Melhor: %0.6f\n", resultados[0]);
-
-            printf("\n\n\t MELHOR MINIMO ENCONTRADO: %0.6f\n\n", resultados[0]);
-            media = calcularMedia(resultados, 10);
-            double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
-            gerarRelatorio(arquivo, populacoes, rodadasPorPopulacao, iteracoes, iter, resultados, media, desvioPadrao);
-
-            // fprintf(arquivo, "Populacao: %d, Iteracoes: %d, Melhor: %.6f, Media: %.6f, DesvioPadrao: %.6f\n",
-            //         populacoes[rodadasPorPopulacao], iteracoes[iter], resultados[0], media, desvioPadrao);
-        }
-    }
-}
-
 // Função principal
 int main() {
     srand(time(NULL));
-    // numero de rodadas internas
-    int iteracoes[] = {20, 50, 100}; 
+    int iteracoes[] = {20, 50, 100};
     int populacoes[] = {50, 100};
-    int numRodaddas = 10;
-    int count = 0;
-    FILE *arquivo = escreverArquivo("resultados.txt");
+    FILE *arquivo = fopen("resultados.txt", "w");
 
-    while (numRodaddas >= count){
-        inicializar(populacoes, iteracoes, arquivo);
-        count++;
+    for (int p = 0; p < 2; p++) {
+        for (int iter = 0; iter < 3; iter++) {
+            double resultados[10];
+            for (int execucao = 0; execucao < 10; execucao++) {
+                Swarm enxame;
+                inicializarEnxame(&enxame, populacoes[p], 2, -512, 512, 77);
+                resultados[execucao] = executarPSO(&enxame, iteracoes[iter], 0.5, 1.5, 1.5, -512, 512);
+                free(enxame.globalBestPosition);
+                for (int i = 0; i < populacoes[p]; i++) {
+                    free(enxame.particles[i].position);
+                    free(enxame.particles[i].velocity);
+                    free(enxame.particles[i].bestPosition);
+                }
+                free(enxame.particles);
+            }
+            double media = calcularMedia(resultados, 10);
+            double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
+            fprintf(arquivo, "Populacao: %d, Iteracoes: %d, Melhor: %.6f, Media: %.6f, DesvioPadrao: %.6f\n",
+                    populacoes[p], iteracoes[iter], resultados[0], media, desvioPadrao);
+        }
     }
-
-    printf("Fim do Enxame de Particulas");
     fclose(arquivo);
     return 0;
 }

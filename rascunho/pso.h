@@ -1,9 +1,9 @@
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
 #include <float.h>
-#include "../data/libs/fileSys.cpp"
 
 // Estrutura para representar uma partícula
 typedef struct {
@@ -51,6 +51,3 @@ void updateBestPositions(Swarm *swarm);
 
 // Executa o PSO
 double runPSO(Swarm *swarm, int iterations, double w, double c1, double c2, double minPos, double maxPos);
-
-void executarEnxame(int populacoes[2], int rodadasPorPopulacao, double resultados[10], int iteracoes[3], int iter);
-
