@@ -140,7 +140,7 @@ double calcularDesvioPadrao(double *resultados, int tamanho, double media) {
 
 // ========== FIM DAS FUNÇÕES do trabalho ===========
 
-void gerarRelatorio(FILE *arquivo, int populacao, int interacao, double resultado,double desvioPadrao){
+void gerarRelatorio(FILE *arquivo, int populacao, int interacao, double resultado){
 
     fWiriteSTRING(arquivo, "População: ");
     fWiriteINT(arquivo, populacao);
@@ -158,9 +158,9 @@ void gerarRelatorio(FILE *arquivo, int populacao, int interacao, double resultad
     // fWiriteFLOAT(arquivo, media);
     // printf(", Media: %0.6f",media);
 
-    fWiriteSTRING(arquivo, ", DesvioPadrão: ");
-    fWiriteFLOAT(arquivo, desvioPadrao);
-    printf(", DesvioPadrão: %0.6f",desvioPadrao);
+    // fWiriteSTRING(arquivo, ", DesvioPadrão: ");
+    // fWiriteFLOAT(arquivo, desvioPadrao);
+    // printf(", DesvioPadrão: %0.6f",desvioPadrao);
     fWiriteLN(arquivo);
 }
 
@@ -177,7 +177,7 @@ void executar(FILE *arquivo,int populacao, int iteracao){
         free(enxame.particles[i].bestPosition);
     }
     free(enxame.particles);
-    gerarRelatorio(arquivo,populacao,iteracao,resultado,0,0);
+    gerarRelatorio(arquivo,populacao,iteracao,resultado);
 }
 
 void executarRodadaDeIndividuos(FILE *arquivo,int tamVetIndividuos,int particula, int individuos[]){
