@@ -192,7 +192,9 @@ void executarRodadaDeIndividuos(FILE *arquivo,int tamVetIndividuos,int particula
 void executarRodadaDeParticulas(FILE *arquivo,int tamVetParticulas, int particulas[],  int individuos[]){
     for (int atual = 0; atual < tamVetParticulas; atual++){
         int particula = particulas[atual];
+        for (int i = 0; i < particula; i++){
         executarRodadaDeIndividuos(arquivo,3,particula,individuos);
+        }
     }
     
 }
