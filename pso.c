@@ -138,12 +138,9 @@ double calcularDesvioPadrao(double *resultados, int tamanho, double media) {
     return raizQuadradaPersonalizada(soma / tamanho);
 }
 
+// ========== FIM DAS FUNÇÕES do trabalho ===========
 
-
-
-void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, int interacao, double resultados[10], double media, double desvioPadrao){
-    int populacao = populacoes[rodadasPorPopulacao];
-    double melhor = resultados[0];
+void gerarRelatorio(FILE *arquivo, int populacao, int interacao, double resultado,double desvioPadrao){
 
     fWiriteSTRING(arquivo, "População: ");
     fWiriteINT(arquivo, populacao);
@@ -154,12 +151,12 @@ void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, i
     printf(", Iterações: %d",interacao);
 
     fWiriteSTRING(arquivo, ", Melhor: ");
-    fWiriteFLOAT(arquivo, melhor);
-    printf(", Melhor: %0.6f",melhor);
+    fWiriteFLOAT(arquivo, resultado);
+    printf(", Melhor: %0.6f",resultado);
 
-    fWiriteSTRING(arquivo, ", Media: ");
-    fWiriteFLOAT(arquivo, media);
-    printf(", Media: %0.6f",media);
+    // fWiriteSTRING(arquivo, ", Media: ");
+    // fWiriteFLOAT(arquivo, media);
+    // printf(", Media: %0.6f",media);
 
     fWiriteSTRING(arquivo, ", DesvioPadrão: ");
     fWiriteFLOAT(arquivo, desvioPadrao);
@@ -167,15 +164,51 @@ void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, i
     fWiriteLN(arquivo);
 }
 
-void inicializar(int numRodadas, int iteracoes[],int populacoes[]){
+void executar(FILE *arquivo,int populacao, int iteracao){
+    Swarm enxame;
+    double resultado;
+
+    inicializarEnxame(&enxame, populacao, 2, -512, 512, 77);
+    resultado = executarPSO(&enxame, iteracao, 0.5, 1.5, 1.5, -512, 512);
+    free(enxame.globalBestPosition);
+    for (int i = 0; i < populacao; i++) {
+        free(enxame.particles[i].position);
+        free(enxame.particles[i].velocity);
+        free(enxame.particles[i].bestPosition);
+    }
+    free(enxame.particles);
+    gerarRelatorio(arquivo,populacao,iteracao,resultado,0,0);
+}
+
+void executarRodadaDeIndividuos(FILE *arquivo,int tamVetIndividuos,int particula, int individuos[]){
+    for (int atual = 0; atual < tamVetIndividuos; atual++){
+        int individuo = individuos[atual];
+        printf("executando com \n %d particulas X %d individuos \n",particula,individuo);
+        executar(arquivo,individuo, particula);
+    }
+    printf("\n\n");
+}
+
+void executarRodadaDeParticulas(FILE *arquivo,int tamVetParticulas, int particulas[],  int individuos[]){
+    for (int atual = 0; atual < tamVetParticulas; atual++){
+        int particula = particulas[atual];
+        executarRodadaDeIndividuos(arquivo,3,particula,individuos);
+    }
+    
+}
+
+void inicializar(int numRodadas, int particulas[],int individuos[]){
     int count = 0;
     FILE *arquivo = escreverArquivo(LOCALFILE);
+    double resultados[10];
 
     while (numRodadas >= count){
         printf("\n\t\t =====| EXECUTANDO RODADA %d |=====\n\n",count);
-        
+            executarRodadaDeParticulas(arquivo,2,particulas,individuos);
         count++;
     }
+    // double media = calcularMedia(resultados, 10);
+    // double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
     fclose(arquivo);
 }
 
@@ -184,12 +217,19 @@ void inicializar(int numRodadas, int iteracoes[],int populacoes[]){
 int main() {
     srand(time(NULL));
     // numero de rodadas internas
-    int iteracoes[] = {20, 50, 100}; 
-    int populacoes[] = {50, 100};
+    // POPULACAO
+    int individuos[] = {20, 50, 100};
+    // INTERACOES 
+    int particulas[] = {50, 100}; 
     int numRodaddas = 10;
+
+    // run mode 
+    // (50 particulas X 20 população) X 10
+    // (50 particulas X 50 população) X 10
+    // (50 particulas X 100 população) X 10
     
 
-    inicializar(numRodaddas,iteracoes,populacoes);
+    inicializar(numRodaddas,particulas,individuos);
     printf("Fim do Enxame de Particulas");
     return 0;
 }
