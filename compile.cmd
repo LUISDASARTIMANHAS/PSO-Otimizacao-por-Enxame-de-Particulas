@@ -68,7 +68,7 @@ if not exist "builds/%fullFileName%.exe" (
     exit /b 1
 )
 
-tar -a -c -f "zip/%fullFileName%.zip" *data *builds *rascunho *.pdf *.h *.c *.c functions.c *.cmd *.md
+tar -a -c -f "zip/Lucas-E-Luis-%fullFileName%.zip" *data *builds *rascunho *.pdf *.h *.c *.c functions.c *.cmd *.md
 
 msg * /v /w %fullFileName%.exe foi compilado!
 

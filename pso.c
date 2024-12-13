@@ -64,8 +64,6 @@ double avaliarAptidao(double *posicao) {
 
 // Atualiza velocidade
 void atualizarVelocidade(Particle *particula, double *globalBestPosition, int dimensoes, double w, double c1, double c2) {
-    // a) Atualize a velocidade da partícula pela fórmula:
-    
     for (int d = 0; d < dimensoes; d++) {
         double r1 = (double)rand() / RAND_MAX;
         double r2 = (double)rand() / RAND_MAX;
@@ -77,8 +75,6 @@ void atualizarVelocidade(Particle *particula, double *globalBestPosition, int di
 
 // Atualiza posição
 void atualizarPosicao(Particle *particula, double posMin, double posMax, int dimensoes) {
-//     (b) Atualize a posição da particular pela fórmula:
-    //  x (t +1)  x (t)+ v (t +1)
     for (int d = 0; d < dimensoes; d++) {
         particula->position[d] += particula->velocity[d];
         if (particula->position[d] < posMin) {
@@ -142,49 +138,7 @@ double calcularDesvioPadrao(double *resultados, int tamanho, double media) {
     return raizQuadradaPersonalizada(soma / tamanho);
 }
 
-void executarEnxame(int populacoes[2], int rodadasPorPopulacao, double resultados[10], int interacao){
-    for (int execucao = 0; execucao < 10; execucao++){
-        Swarm enxame;
-        inicializarEnxame(&enxame, populacoes[rodadasPorPopulacao], 2, -512, 512, 77);
-        resultados[execucao] = executarPSO(&enxame, interacao, 0.5, 1.5, 1.5, -512, 512);
-        free(enxame.globalBestPosition);
 
-        for (int i = 0; i < populacoes[rodadasPorPopulacao]; i++){
-            free(enxame.particles[i].position);
-            free(enxame.particles[i].velocity);
-            free(enxame.particles[i].bestPosition);
-        }
-        free(enxame.particles);
-    }
-}
-
-void execucoes(int populacoes[2], int p, double resultados[10], int iteracoes[3], int iter, FILE *arquivo){
-        for (int execucao = 0; execucao < 10; execucao++)
-        {
-            Swarm enxame;
-            inicializarEnxame(&enxame, populacoes[p], 2, -512, 512, 77);
-            resultados[execucao] = executarPSO(&enxame, iteracoes[iter], 0.5, 1.5, 1.5, -512, 512);
-            free(enxame.globalBestPosition);
-            for (int i = 0; i < populacoes[p]; i++)
-            {
-                free(enxame.particles[i].position);
-                free(enxame.particles[i].velocity);
-                free(enxame.particles[i].bestPosition);
-            }
-            free(enxame.particles);
-        }
-        double media = calcularMedia(resultados, 10);
-        double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
-        fprintf(arquivo, "Populacao: %d, Iteracoes: %d, Melhor: %.6f, Media: %.6f, DesvioPadrao: %.6f\n",
-                populacoes[p], iteracoes[iter], resultados[0], media, desvioPadrao);
-    }
-
-void executarInteracao(int populacoes[2], int p, int iteracoes[3], FILE *arquivo){
-    for (int iter = 0; iter < 3; iter++){
-        double resultados[10];
-        execucoes(populacoes, p, resultados, iteracoes, iter, arquivo);
-    }
-}
 
 
 void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, int interacao, double resultados[10], double media, double desvioPadrao){
@@ -213,14 +167,16 @@ void gerarRelatorio(FILE *arquivo, int populacoes[2], int rodadasPorPopulacao, i
     fWiriteLN(arquivo);
 }
 
-void inicializar(int numRodadas, int iteracoes[], FILE *arquivo){
+void inicializar(int numRodadas, int iteracoes[],int populacoes[]){
     int count = 0;
-    while (numRodaddas >= count){
+    FILE *arquivo = escreverArquivo(LOCALFILE);
+
+    while (numRodadas >= count){
         printf("\n\t\t =====| EXECUTANDO RODADA %d |=====\n\n",count);
-        inicializar(populacoes, iteracoes, arquivo);
+        
         count++;
     }
-
+    fclose(arquivo);
 }
 
 
@@ -230,14 +186,10 @@ int main() {
     // numero de rodadas internas
     int iteracoes[] = {20, 50, 100}; 
     int populacoes[] = {50, 100};
-    int array[] = { 0, 1, 2, 3, 4, 5, 6 };
     int numRodaddas = 10;
-    FILE *arquivo = escreverArquivo(LOCALFILE);
-
-    inicializar(numRodaddas);
     
 
+    inicializar(numRodaddas,iteracoes,populacoes);
     printf("Fim do Enxame de Particulas");
-    fclose(arquivo);
     return 0;
 }
