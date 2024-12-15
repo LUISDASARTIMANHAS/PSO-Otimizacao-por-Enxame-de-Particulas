@@ -1,3 +1,4 @@
+// Feito por: Lucas Garcia E Luis Augusto
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>

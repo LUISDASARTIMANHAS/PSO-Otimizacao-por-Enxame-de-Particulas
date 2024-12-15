@@ -1,3 +1,4 @@
+// Feito por: Lucas Garcia E Luis Augusto
 #include "pso.h"
 
 // Funções matemáticas customizadas
@@ -164,7 +165,7 @@ void gerarRelatorio(FILE *arquivo, int populacao, int interacao, double resultad
     fWiriteLN(arquivo);
 }
 
-void executar(FILE *arquivo,int populacao, int iteracao){
+double executar(FILE *arquivo,int populacao, int iteracao){
     Swarm enxame;
     double resultado;
 
@@ -178,39 +179,44 @@ void executar(FILE *arquivo,int populacao, int iteracao){
     }
     free(enxame.particles);
     gerarRelatorio(arquivo,populacao,iteracao,resultado);
+    return resultado;
 }
 
-void executarRodadaDeIndividuos(FILE *arquivo,int tamVetIndividuos,int particula, int individuos[]){
+double executarRodadaDeIndividuos(FILE *arquivo,int tamVetIndividuos,int interacao, int individuos[]){
+    double resultado;
     for (int atual = 0; atual < tamVetIndividuos; atual++){
         int individuo = individuos[atual];
-        printf("executando com \n %d particulas X %d individuos \n",particula,individuo);
-        executar(arquivo,individuo, particula);
+        printf("executando com \n %d particulas X %d individuos \n",interacao,individuo);
+        resultado = executar(arquivo,individuo, interacao);
     }
     printf("\n\n");
+    return resultado;
 }
 
-void executarRodadaDeParticulas(FILE *arquivo,int tamVetParticulas, int particulas[],  int individuos[]){
-    for (int atual = 0; atual < tamVetParticulas; atual++){
-        int particula = particulas[atual];
-        for (int i = 0; i < particula; i++){
-        executarRodadaDeIndividuos(arquivo,3,particula,individuos);
-        }
+double executarRodadaDeInteracoes(FILE *arquivo,int tamVetInteracoes, int interacoes[],  int individuos[]){
+    double resultado;
+    for (int atual = 0; atual < tamVetInteracoes; atual++){
+        int interacao = interacoes[atual];
+        resultado = executarRodadaDeIndividuos(arquivo,3,interacao,individuos);
     }
-    
+    return resultado;
 }
 
-void inicializar(int numRodadas, int particulas[],int individuos[]){
+void inicializar(int numRodadas, int interacoes[],int individuos[]){
     int count = 0;
     FILE *arquivo = escreverArquivo(LOCALFILE);
     double resultados[10];
 
     while (numRodadas >= count){
         printf("\n\t\t =====| EXECUTANDO RODADA %d |=====\n\n",count);
-            executarRodadaDeParticulas(arquivo,2,particulas,individuos);
+        fWiriteSTRING(arquivo,"\n\t\t =====| EXECUTANDO RODADA ");
+        fWiriteINT(arquivo,count);
+        fWiriteSTRING(arquivo," |=====\n\n");
+        resultados[count] = executarRodadaDeInteracoes(arquivo,2,interacoes,individuos);
         count++;
     }
-    // double media = calcularMedia(resultados, 10);
-    // double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
+    double media = calcularMedia(resultados, 10);
+    double desvioPadrao = calcularDesvioPadrao(resultados, 10, media);
     fclose(arquivo);
 }
 
@@ -221,8 +227,8 @@ int main() {
     // numero de rodadas internas
     // POPULACAO
     int individuos[] = {20, 50, 100};
-    // INTERACOES 
-    int particulas[] = {50, 100}; 
+    // INTERACOES numero de rodadas internas
+    int interacoes[] = {50, 100}; 
     int numRodaddas = 10;
 
     // run mode 
@@ -231,7 +237,7 @@ int main() {
     // (50 particulas X 100 população) X 10
     
 
-    inicializar(numRodaddas,particulas,individuos);
+    inicializar(numRodaddas,interacoes,individuos);
     printf("Fim do Enxame de Particulas");
     return 0;
 }
