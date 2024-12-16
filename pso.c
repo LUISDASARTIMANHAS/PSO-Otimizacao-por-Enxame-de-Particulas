@@ -242,13 +242,19 @@ int main() {
 
     // run mode 
     // 10 x 20 (Interações) com 50 particulas
+    // 200 linhas
     // 10 x 50 (Interações) com 50 particulas
+    // 500 linhas
     // 10 x 100 (Interações) com 50 particulas
+    // 1000 linhas
     // total 1700 linhas
 
     // 10 x 20 (Interações) com 100 particulas
+    // 200 linhas
     // 10 x 50 (Interações) com 100 particulas
+    // 500 linhas
     // 10 x 100 (Interações) com 100 particulas
+    // 1000 linhas
     // total 1700 linhas
     
 
