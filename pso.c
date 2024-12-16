@@ -154,14 +154,21 @@ void gerarRelatorio(FILE *arquivo, int populacao, int interacao, double resultad
     fWiriteSTRING(arquivo, ", Melhor: ");
     fWiriteFLOAT(arquivo, resultado);
     printf(", Melhor: %0.6f",resultado);
+    fWiriteLN(arquivo);
+}
 
-    // fWiriteSTRING(arquivo, ", Media: ");
-    // fWiriteFLOAT(arquivo, media);
-    // printf(", Media: %0.6f",media);
+void gerarRelatorioMediaeDesvioPadrao(FILE *arquivo, int numRodadas, double resultados[]){
+    double media = calcularMedia(resultados, numRodadas);
+    double desvioPadrao = calcularDesvioPadrao(resultados, numRodadas, media);
 
-    // fWiriteSTRING(arquivo, ", DesvioPadrão: ");
-    // fWiriteFLOAT(arquivo, desvioPadrao);
-    // printf(", DesvioPadrão: %0.6f",desvioPadrao);
+    fWiriteSTRING(arquivo,"\n\t\t =====| MEDIA E DESVIO PADRAO |=====\n\n");
+    fWiriteSTRING(arquivo, ", Media: ");
+    fWiriteFLOAT(arquivo, media);
+    printf(", Media: %0.6f",media);
+
+    fWiriteSTRING(arquivo, ", DesvioPadrão: ");
+    fWiriteFLOAT(arquivo, desvioPadrao);
+    printf(", DesvioPadrão: %0.6f",desvioPadrao);
     fWiriteLN(arquivo);
 }
 
@@ -223,8 +230,8 @@ void inicializar(int numRodadas, int interacoes[],int populacoes[]){
         resultados[count-1] = executarRodadaDeInteracoes(arquivo,3,interacoes,populacoes);
         count++;
     }
-    double media = calcularMedia(resultados, numRodadas);
-    double desvioPadrao = calcularDesvioPadrao(resultados, numRodadas, media);
+    
+    gerarRelatorioMediaeDesvioPadrao(arquivo,numRodadas,resultados);
     fclose(arquivo);
 }
 
